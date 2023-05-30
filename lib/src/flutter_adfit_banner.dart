@@ -14,16 +14,10 @@ class AdFitBanner extends StatefulWidget {
 
   final bool invisibleOnLoad;
 
-  /// (Test)
-  /// true 시, 상위 위젯 사이즈만큼 비율 유지하여 확대
-  /// (default false, AdFitSDK 정책 검토 필요)
-  final bool fillParent;
-
   const AdFitBanner({
     required this.adId,
     this.adSize = AdFitBannerSize.BANNER,
     this.listener,
-    this.fillParent = false,
     this.wantKeepAlive = true,
     this.invisibleOnLoad = false,
     Key? key,
@@ -71,34 +65,7 @@ class _AdFitBannerState extends State<AdFitBanner>
   Widget build(BuildContext context) {
     super.build(context);
     if (Platform.isAndroid || Platform.isIOS) {
-      return LayoutBuilder(builder: (_, constraint) {
-        double scale = _getScale(constraint, widget.adSize);
-        return Visibility(
-            visible: _isVisible,
-            child: (1.0 != scale)
-                ? Container(
-                    alignment: Alignment.center,
-                    width: widget.adSize.width * scale,
-                    height: widget.adSize.height * scale,
-                    child: Transform.scale(
-                      scale: scale,
-                      child: _buildAdView(),
-                    ),
-                  )
-                : _buildAdView());
-        if (1.0 < scale) {
-          return Container(
-            alignment: Alignment.center,
-            width: widget.adSize.width * scale,
-            height: widget.adSize.height * scale,
-            child: Transform.scale(
-              scale: scale,
-              child: _buildAdView(),
-            ),
-          );
-        }
-        return _buildAdView();
-      });
+      return _buildAdView();
     }
     debugPrint(
       'flutter_adfit package only support for Android and IOS.\n'
@@ -107,27 +74,9 @@ class _AdFitBannerState extends State<AdFitBanner>
     return Container();
   }
 
-  /// scale 여부 체크 및 scale factor 리턴 (min 1.0 : scale 축소 방지)
-  double _getScale(BoxConstraints constraints, AdFitBannerSize adSize) {
-    if (!_isVisible) return 0.0;
-    double scale = 1.0;
-    if (widget.fillParent == true) {
-      Size constraintSize = constraints.biggest;
-      if (adSize.width <= constraintSize.width &&
-          adSize.height <= constraintSize.height) {
-        scale = min(
-          constraintSize.width / adSize.width,
-          constraintSize.height / adSize.height,
-        );
-      }
-    }
-    return max(1.0, scale);
-  }
-
   Widget _buildAdView() {
     if (Platform.isAndroid) {
       return SizedBox(
-        width: widget.adSize.width * 1.0,
         height: widget.adSize.height * 1.0,
         child: AndroidView(
           viewType: 'flutter.kakao.adfit/AdFitView',
@@ -142,7 +91,6 @@ class _AdFitBannerState extends State<AdFitBanner>
       );
     } else if (Platform.isIOS) {
       return SizedBox(
-        width: widget.adSize.width * 1.0,
         height: widget.adSize.height * 1.0,
         child: UiKitView(
           viewType: 'flutter.kakao.adfit/AdFitView',
