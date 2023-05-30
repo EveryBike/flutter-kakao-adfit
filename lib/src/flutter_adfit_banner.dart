@@ -75,6 +75,7 @@ class _AdFitBannerState extends State<AdFitBanner>
   }
 
   Widget _buildAdView() {
+    final width = MediaQuery.of(context).size.width;
     if (Platform.isAndroid) {
       return SizedBox(
         height: widget.adSize.height * 1.0,
@@ -82,7 +83,7 @@ class _AdFitBannerState extends State<AdFitBanner>
           viewType: 'flutter.kakao.adfit/AdFitView',
           creationParams: {
             "adId": widget.adId,
-            "width": widget.adSize.width,
+            "width": width,
             "height": widget.adSize.height,
           },
           creationParamsCodec: const JSONMessageCodec(),
@@ -96,7 +97,7 @@ class _AdFitBannerState extends State<AdFitBanner>
           viewType: 'flutter.kakao.adfit/AdFitView',
           creationParams: {
             "adId": widget.adId,
-            "width": widget.adSize.width,
+            "width": width,
             "height": widget.adSize.height,
           },
           creationParamsCodec: const JSONMessageCodec(),
