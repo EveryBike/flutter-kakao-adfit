@@ -3,6 +3,7 @@ package flutter.kakao.flutter_adfit
 import android.app.Activity
 import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -23,6 +24,11 @@ class FlutterAdfitPlugin: FlutterPlugin, ActivityAware {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       AdViewFactory.registerWith(registrar)
+    }
+
+    @JvmStatic
+    fun registerWith(flutterPluginBinding: FlutterPluginBinding) {
+      AdViewFactory.registerWith(flutterPluginBinding)
     }
   }
 

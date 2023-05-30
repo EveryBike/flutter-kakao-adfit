@@ -15,7 +15,7 @@ import io.flutter.plugin.platform.PlatformView
 import org.json.JSONException
 import org.json.JSONObject
 
-class NativeAdView(private val context: Context, messenger: BinaryMessenger?, viewId: Int, arguments: Any)
+class NativeAdView(private val context: Context, messenger: BinaryMessenger?, viewId: Int, arguments: Any?)
     : PlatformView, EventChannel.StreamHandler, MethodCallHandler {
     private var adView: BannerAdView? = null
     private var eventSink: EventSink? = null
@@ -23,7 +23,7 @@ class NativeAdView(private val context: Context, messenger: BinaryMessenger?, vi
 
     init {
         try {
-            methodChannel = with(MethodChannel(messenger,
+            methodChannel = with(MethodChannel(messenger!!,
                     "flutter_adfit_view_$viewId")) {
                 setMethodCallHandler(this@NativeAdView)
                 return@with this

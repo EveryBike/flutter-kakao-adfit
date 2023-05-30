@@ -9,17 +9,17 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewFactory
 
 class AdViewFactory
-    private constructor(private val messenger: BinaryMessenger, private val appContext: Context)
+    private constructor(private val messenger: BinaryMessenger?, private val appContext: Context?)
     : PlatformViewFactory(JSONMessageCodec.INSTANCE) {
 
     var activity: Activity? = null
     private var adView: NativeAdView? = null
 
-    override fun create(context: Context, id: Int, args: Any): NativeAdView? {
+    override fun create(context: Context, id: Int, args: Any?): NativeAdView {
         activity?.let {
             adView = NativeAdView(it, messenger, id, args)
         }
-        return adView
+        return adView!!
     }
 
     fun onDestroy() {
